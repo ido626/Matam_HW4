@@ -1,12 +1,33 @@
-
+#include <iostream>
+#include <fstream>
 #include "MatamStory.h"
-
+#include "Events\Event.h"
+#include "Players\Player.h"
 #include "Utilities.h"
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
 
     /*===== TODO: Open and read events file =====*/
+	std::string eventName;
 
+    while (eventsStream >> eventName){
+	if (!(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
+            throw std::runtime_error("Invalid Events File");
+        }
+
+        if (eventName == "Pack") {
+            int packSize;
+            eventsStream >> packSize;
+
+            for (int i = 0; i < packSize; i++) {
+                eventsStream >> eventName;
+                if ( !(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
+                    throw std::runtime_error("Invalid Events File");
+                }
+            }
+
+     Event::events.push_back(eventName);
+    }
     /*==========================================*/
 
 
