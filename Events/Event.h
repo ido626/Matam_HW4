@@ -15,10 +15,11 @@ protected:
     int Loot = 0 ;
     int Damage = 0 ;
 
+
 public:
     virtual ~Event() = default;
     /**
-     * Gets the description of the event
+     * Gets the Name of the event
      *
      * @return - the description of the event
     */
@@ -33,7 +34,13 @@ public:
     static std::set<std::string> allGameEvents;
 
     /** Special Events**/
-    void SolarEclipse(Player& player);
+    virtual void solarEclipse(Player& player);
+    virtual void potionMerchant(Player& player);
+
+    /**
+    * creates an event from a string description
+    */
+    std::unique_ptr<Event> createEvent(const std::string & eventName);
 
 };
 
@@ -95,44 +102,44 @@ class Balrog: public Monster {
 
 class Pack: public Monster {
 private:
-    std::vector<std::shared_ptr<Monster>> monstersPack; // smart ptr vector for pack data structure
+    std::vector<std::unique_ptr<Monster>> monstersPack; // smart ptr vector for pack data structure
 
 
 public:
     Pack():Monster("",0,0,0){}
 
-    void addMonster(const std::shared_ptr<Monster>& monster) {
+    void addMonster(const std::unique_ptr<Monster>& monster) {
         monstersPack.push_back(monster);
     }
 
     // for modularity I split all kinds of getters for the pack
 
     [[nodiscard]] unsigned int getCombatPower() const override{
-    unsigned int combinedPower = 0;
+        unsigned int combinedPower = 0;
 
-    for (const auto & i : monstersPack) {
-        combinedPower += i->getCombatPower();
-    }
-    return combinedPower;
+        for (const auto & i : monstersPack) {
+            combinedPower += i->getCombatPower();
+        }
+        return combinedPower;
     }
 
     [[nodiscard]] int getLoot() const override {
-    int combinedLoot = 0;
+        int combinedLoot = 0;
 
-    for (const auto&i : monstersPack) {
-        combinedLoot += i->getLoot();
-    }
-    return combinedLoot;
+        for (const auto&i : monstersPack) {
+            combinedLoot += i->getLoot();
+        }
+        return combinedLoot;
     }
 
     [[nodiscard]] int getDamage() const override {
-    int combinedDamage = 0;
+        int combinedDamage = 0;
 
-    for (const auto&i : monstersPack) {
-        combinedDamage += i->getDamage();
+        for (const auto&i : monstersPack) {
+            combinedDamage += i->getDamage();
 
-    }
-    return combinedDamage;
+        }
+        return combinedDamage;
     }
     [[nodiscard]] string getDescription() const override {
         int packSize = monstersPack.size();
@@ -142,5 +149,34 @@ public:
                     ", damage " + std::to_string(getDamage()) + ")";
 
     }
+};
+
+    class SolarEclipse: public Event {
+
+    public:
+        void solarEclipse(Player& player)override {
+            if (player.getJob().toString() == "Magician") {
+                player.setForce(getForce()+1) ;
+            }else {player.setForce(getForce()-1) ;}
+        }
+    };
+
+
+    class PotionMerchant:public Event {
+    public:
+        void potionMerchant(Player& player) override{
+            if (player.getCharacter().toString() == "Responsible") {
+                while (player.getMaxHP() > player.getHealthPoints() && player.getCoins() >= 5 ) {
+                    player.setHealthPoints(getHealthPoints()+ 10) ;
+                    player.setCoins(getCoins()- 5);
+                }
+            }else if (player.getCharacter().toString() == "RiskTaking") {
+                if (player.getHealthPoints() < 50 && player.getCoins()>=5) {
+                    player.setHealthPoints(getHealthPoints() + 10) ;
+                    player.setCoins(getCoins()- 5);
+                }
+            }
+        }
+    };
 
 };

@@ -11,23 +11,27 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
 	std::string eventName;
 
     while (eventsStream >> eventName){
-	if (!(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
+	if ( Event::allGameEvents.find(eventName) == Event::allGameEvents.end() ) { //if the event is not in the list of game known events
             throw std::runtime_error("Invalid Events File");
         }
 
-        if (eventName == "Pack") {
-            int packSize;
-            eventsStream >> packSize;
+    if (eventName == "Pack") {
 
-            for (int i = 0; i < packSize; i++) {
-                eventsStream >> eventName;
-                if ( !(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
-                    throw std::runtime_error("Invalid Events File");
-                }
+        int packSize;
+        if ( !(eventsStream >> packSize) || packSize <= 0) {
+          throw std::runtime_error("Invalid Events File");
+        }
+		std::vector<std::string> packMembers ;
+        for (int i = 0; i < packSize; i++) {
+            if ( !(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
+                throw std::runtime_error("Invalid Events File");
             }
 
-     Event::events.push_back(eventName);
-    }
+            packMembers.push_back(eventName);
+        }
+        Event::events.push_back("Pack");
+    }else {Event::events.push_back(eventName);}
+	}
     /*==========================================*/
 
 
@@ -43,11 +47,19 @@ void MatamStory::playTurn(Player& player) {
 
     /**
      * Steps to implement (there may be more, depending on your design):
-     * 1. Get the next event from the events list
-     * 2. Print the turn details with "printTurnDetails"
-     * 3. Play the event
-     * 4. Print the turn outcome with "printTurnOutcome"
+     * 1. Get the next event from the events list*/
+
+    Event currentEvent = createEvent(const std::string & Event::events[this->m_turnIndex])
+
+     /** 2. Print the turn details with "printTurnDetails"*/
+	printTurnDetails(m_turnIndex, Player& player, Event & currentEvent)
+
+     /** 3. Play the event */
+////////////// your here //////////////////////
+     /** 4. Print the turn outcome with "printTurnOutcome"
     */
+
+
 
     m_turnIndex++;
 }
