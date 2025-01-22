@@ -6,12 +6,15 @@
 #include "../Players/Player.h"
 #include "Event.h"
 
+
 string Event::getDescription() const{return""; }
 
 std::vector<std::string> Event::events {}; // initialization of events vector
 std::set<std::string> allGameEvents = {"Snail", "Balrog" ,"Slime", "Pack", "SolarEclipse", "PotionMerchant" };// initialization of all known game events set
-
-std::unique_ptr<Event> createEvent(const std::string & eventName) {
+std::set<std::string> encounterEvents = {"Snail", "Balrog" ,"Slime", "Pack" };// set of encounter events
+std::set<std::string>specialEvents = {"SolarEclipse", "PotionMerchant" }; // set of special events
+/*
+std::unique_ptr<Event> Event::createEvent(const std::string &eventName) {
     if (eventName == "Snail") {
         return std::make_unique<Snail>();
     }
@@ -32,8 +35,33 @@ std::unique_ptr<Event> createEvent(const std::string & eventName) {
     }
     else {throw std::runtime_error("Invalid Events File");}
 }
+*/
+/*
+std::string playEvent(Player & player,const Event & currentEvent, const std::string & eventName) {
+    if (encounterEvents.find(eventName) != encounterEvents.end()) // checks if the event is an encounter with a monster
+        if (player.getJob().getCombatPower() > currentEvent.getCombatPower()) {
+            player.setLevel(player.getLevel() + 1); // player level ++
+            player.setCoins(player.getCoins() + currentEvent.getLoot()); //player coins after winning =  player coins + monster loot
 
-void playEvent(const Player & player,std::make_unique<monster>()) {
-    if (player.getCombatPower() > )
+            std::string outcome = getEncounterWonMessage(player, currentEvent.getLoot());
+            return outcome;
+        }else {
+            player.setHealthPoints(player.getHealthPoints() - currentEvent.getDamage());// player hp after loosing = player current hp - monster damage
+
+            std::string outcome = getEncounterLostMessage(player, currentEvent.getDamage());
+            return outcome;
+        }
+
+     if (specialEvents.find(eventName) != specialEvents.end()) {
+        if (eventName == "SolarEclipse") {
+            std::string outcome = getSolarEclipseMessage(player,currentEvent.solarEclipse(player));
+            return outcome;
+        }
+        else if (eventName == "PotionMerchant") {
+            std::string outcome = getPotionsPurchaseMessage(player,currentEvent.potionMerchant(player));
+            return outcome;
+        }
+    }
+    return"";
 }
-////////////// your here //////////////////////
+*/

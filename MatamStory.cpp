@@ -48,16 +48,16 @@ void MatamStory::playTurn(Player& player) {
     /**
      * Steps to implement (there may be more, depending on your design):
      * 1. Get the next event from the events list*/
-
-    Event currentEvent = createEvent(const std::string & Event::events[this->m_turnIndex])
+	const std::unique_ptr<Event> currentEvent = Event::createEvent(Event::events[this->m_turnIndex]);
 
      /** 2. Print the turn details with "printTurnDetails"*/
-	printTurnDetails(m_turnIndex, Player& player, Event & currentEvent)
+	printTurnDetails(m_turnIndex ,player,*currentEvent);
 
      /** 3. Play the event */
-////////////// your here //////////////////////
-     /** 4. Print the turn outcome with "printTurnOutcome"
-    */
+	std::string outcome = playEvent(player, *currentEvent, Event::events[this->m_turnIndex]);
+
+     /** 4. Print the turn outcome with "printTurnOutcome"*/
+    printTurnOutcome(outcome);
 
 
 
