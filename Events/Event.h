@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <vector>
-#include <set>
 #include <string>
 #include <map>
 #include <functional>
@@ -12,18 +11,12 @@
 #include "../Players/Player.h"
 
 
+
 class Event {
     protected:
     unsigned int CombatPower = 0 ;
     int Loot = 0 ;
     int Damage = 0 ;
-
-
-
-    /** getters **/
-    [[nodiscard]] virtual unsigned int getCombatPower() const {return CombatPower;};
-    [[nodiscard]] virtual int getLoot() const {return Loot;};
-    [[nodiscard]] virtual int getDamage() const {return Damage;};
 
 public:
     virtual ~Event() = default;
@@ -37,52 +30,11 @@ public:
      * a vector contains all events (input),ordered the same as in eventsStream file
      */
     static std::vector<std::string> events;
-    /**
-    * all known game events set
-    */
-    static std::set<std::string> allGameEvents;
-    /**
-    * all encounter game events set
-    */
-    static std::set<std::string> encounterEvents;
-    /**
-    * all special game events set
-    */
-    static std::set<std::string>specialEvents;
 
-    /** Special Events**/
+/*
     virtual int solarEclipse(Player& player)const;
     virtual int potionMerchant(Player& player)const;
-
-    /**
-    * creates an event from a string description
-
-    static std::unique_ptr<Event> createEvent(const std::string & eventName);
-
-    * plays the current event in the current turn
-
-    friend std::string playEvent(Player & player,const Event & currentEvent, const std::string & eventName);
-    */
-    /**************         factory changes        ********************/
-    using EventFactory = std::function<std::unique_ptr<Event>()>; // ptr for functions
-
-    static std::unique_ptr<Event> createEvent(const std::string& eventName) {
-        auto it = factoryMap().find(eventName);
-        if (it == factoryMap().end()) {
-            throw std::runtime_error("Invalid Events File");
-        }
-        return it->second();
-    }
-
-    static bool registerEvent(const std::string& eventName, FactoryFunction factoryFunction) {
-        return factoryMap().emplace(eventName, factoryFunction).second;
-    }
-
-private:
-    static std::map<std::string, FactoryFunction>& factoryMap() {
-        static std::map<std::string, FactoryFunction> map;
-        return map;
-    }
+*/
 };
 
 /** Base class Monster **/
@@ -110,25 +62,21 @@ class Monster:public Event{ // the base class
                 ", loot " + std::to_string(Loot) +
                     ", damage " + std::to_string(Damage) + ")";
     }
+
+    /** getters **/
+    [[nodiscard]] virtual unsigned int getCombatPower() const {return CombatPower;};
+    [[nodiscard]] virtual int getLoot() const {return Loot;};
+    [[nodiscard]] virtual int getDamage() const {return Damage;};
 };
 
 class Snail: public Monster {
     public:
     Snail():Monster("Snail",5,2,10){}
-
-    static std::unique_ptr<Event> create() {
-        return std::make_unique<Snail>();
-    }
-
 };
 
 class Slime: public Monster {
     public:
     Slime():Monster("Slime",12,5,25){}
-
-    static std::unique_ptr<Event> create() {
-        return std::make_unique<Slime>();
-    }
 };
 
 class Balrog: public Monster {
@@ -138,10 +86,6 @@ class Balrog: public Monster {
     void updateCombatPower() override { // the balrog combat power updates in every encounter no matter the outcome.
         CombatPower += 2 ;
     }
-    static std::unique_ptr<Event> create() {
-        return std::make_unique<Balrog>();
-    }
-
 };
 
 class Pack: public Monster {
@@ -186,23 +130,49 @@ public:
         return combinedDamage;
     }
     [[nodiscard]] string getDescription() const override {
-        int packSize = monstersPack.size();
-        return "Pack of " + std::to_string(packSize) + " members (power "
+        return "Pack of " + std::to_string(monstersPack.size()) + " members (power "
               + std::to_string(getCombatPower())+
                 ", loot " + std::to_string(getLoot()) +
                     ", damage " + std::to_string(getDamage()) + ")";
 
     }
-    /******* you need to finish the creator for pack and the special events !!!!!!!!
-    static std::unique_ptr<Event> create() {
+    static std::unique_ptr<Pack> createPack(const std::vector<std::unique_ptr<Monster>>& monsters) {
         auto pack = std::make_unique<Pack>();
-        pack->addMonster(std::make_unique<Snail>());
-        pack->addMonster(std::make_unique<Balrog>());
+        for (const auto& monster : monsters) {
+            pack->addMonster(monster);
+        }
         return pack;
     }
-    *//////////
+
 };
 
+/**************     factory   ********************/
+/**
+ *factory method - creates an event from a string description
+ */
+class EventFactory {
+private:
+    std::map<std::string, std::function<std::unique_ptr<Event>()>> eventFactoryMap;
+
+public:
+    EventFactory() {
+
+        eventFactoryMap["Snail"] = []() { return std::make_unique<Snail>(); };
+        eventFactoryMap["Slime"] = [](){return std::make_unique<Slime>();};
+        eventFactoryMap["Balrog"] = []() { return std::make_unique<Balrog>(); };
+        eventFactoryMap["Pack"] = []() { return std::make_unique<Pack>(); };
+    }
+
+    [[nodiscard]] std::unique_ptr<Event> createEvent(const std::string& eventName) const {
+        auto it = eventFactoryMap.find(eventName);
+        if (it == eventFactoryMap.end()) {
+            throw std::runtime_error("Invalid Events File");
+        }
+        return it->second();
+    }
+};
+
+/*
     class SolarEclipse: public Event {
 
     public:
@@ -239,4 +209,7 @@ public:
             return potionAmount;
         }
     };
+
 };
+
+*/

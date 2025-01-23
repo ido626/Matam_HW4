@@ -3,16 +3,13 @@
 //
 #include <vector>
 #include <iostream>
-#include "../Players/Player.h"
+
 #include "Event.h"
 
 
 string Event::getDescription() const{return""; }
 
 std::vector<std::string> Event::events {}; // initialization of events vector
-std::set<std::string> allGameEvents = {"Snail", "Balrog" ,"Slime", "Pack", "SolarEclipse", "PotionMerchant" };// initialization of all known game events set
-std::set<std::string> encounterEvents = {"Snail", "Balrog" ,"Slime", "Pack" };// set of encounter events
-std::set<std::string>specialEvents = {"SolarEclipse", "PotionMerchant" }; // set of special events
 /*
 std::unique_ptr<Event> Event::createEvent(const std::string &eventName) {
     if (eventName == "Snail") {

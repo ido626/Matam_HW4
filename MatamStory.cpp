@@ -1,5 +1,11 @@
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <vector>
+#include <string>
+#include <map>
+#include <functional>
+#include <stdexcept>
 #include "MatamStory.h"
 #include "Events\Event.h"
 #include "Players\Player.h"
@@ -8,30 +14,46 @@
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
 
     /*===== TODO: Open and read events file =====*/
-	std::string eventName;
+	EventFactory eventFactory;// creating a map of events
+    std::string eventName; // the input
 
-    while (eventsStream >> eventName){
-	if ( Event::allGameEvents.find(eventName) == Event::allGameEvents.end() ) { //if the event is not in the list of game known events
-            throw std::runtime_error("Invalid Events File");
-        }
+    while (eventsStream >> eventName) { // >> operator reads one word at a time
 
-    if (eventName == "Pack") {
+        if (eventName == "Pack") {
 
-        int packSize;
-        if ( !(eventsStream >> packSize) || packSize <= 0) {
-          throw std::runtime_error("Invalid Events File");
-        }
-		std::vector<std::string> packMembers ;
-        for (int i = 0; i < packSize; i++) {
-            if ( !(eventsStream >> eventName) || Event::allGameEvents.find(eventName) == Event::allGameEvents.end()) { //if the event is not in the list of game known events
+            int packSize;
+            if (!(eventsStream >> packSize) || packSize <= 0) {
                 throw std::runtime_error("Invalid Events File");
             }
 
-            packMembers.push_back(eventName);
+            std::vector<std::unique_ptr<Monster>> packMembers; // the pack members vector
+            for (int i = 0; i < packSize; i++) {
+                if (!(eventsStream >> eventName)) {
+                    throw std::runtime_error("Invalid Events File");
+                }
+                auto event = eventFactory.createEvent(eventName);
+                if (auto monster = dynamic_cast<Monster*>(event.get())) {
+                    packMembers.push_back(std::make_unique<Monster>(*monster));
+                } else {
+                    throw std::runtime_error("Invalid Events File");
+                }
+            }
+
+            auto pack = Pack::createPack(packMembers);
+            Event::events.push_back(pack->getDescription());
+        } else {
+            auto event = eventFactory.createEvent(eventName);
+            Event::events.push_back(event->getDescription());
         }
-        Event::events.push_back("Pack");
-    }else {Event::events.push_back(eventName);}
-	}
+    }
+}
+
+
+
+
+
+
+
     /*==========================================*/
 
 
@@ -48,16 +70,16 @@ void MatamStory::playTurn(Player& player) {
     /**
      * Steps to implement (there may be more, depending on your design):
      * 1. Get the next event from the events list*/
-	const std::unique_ptr<Event> currentEvent = Event::createEvent(Event::events[this->m_turnIndex]);
+
 
      /** 2. Print the turn details with "printTurnDetails"*/
-	printTurnDetails(m_turnIndex ,player,*currentEvent);
+
 
      /** 3. Play the event */
-	std::string outcome = playEvent(player, *currentEvent, Event::events[this->m_turnIndex]);
+
 
      /** 4. Print the turn outcome with "printTurnOutcome"*/
-    printTurnOutcome(outcome);
+
 
 
 
