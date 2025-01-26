@@ -3,33 +3,77 @@
 
 #include <string>
 #include <iostream>
+#include "Job.h"
+
 
 using namespace std;
 using std::string;
 
+
 class Character {
-public:
- virtual string toString() const;
+  public:
+
+  Character& operator=(const Character& other) { //גם פה
+   if (this->toString() != other.toString()) {
+    cout << "Characters don't match" << endl;
+   }
+   return *this;
+  }
+
+    /**
+    * Gets the character as a string
+    *
+    * @return - string that represents the character of the player
+    */
+    virtual string toString() const;
+};
+
+
+class Responsible : public Character {
+  public:
+     string toString() const override{
+        return "Responsible";
+ }
+};
+
+class RiskTaking : public Character {
+   public:
+      string toString() const override{
+        return "RiskTaking";
+ }
 };
 
 class Player {
-protected:
+private:
   string name;
-  unsigned int level;
-  unsigned int force;
-  unsigned int currentHP;
-  unsigned int maxHP;
-  unsigned int coins;
+  unsigned int level = 1;
+  unsigned int force = 5;
+  unsigned int currentHP = 100;
+  unsigned int maxHP = 100;
+  unsigned int coins = 10;
+  std::unique_ptr<Job> job;
   std::unique_ptr<Character> character;
 
 public:
 
-     /**
-     * Gets the description of the player
-     *
-     * @return - description of the player
+    Player(string name, std::unique_ptr<Job> job, std::unique_ptr<Character> character)
+         : name(std::move(name)), job(std::move(job)), character(std::move(character)) {
+             // Check if the job is an Archer and apply a bonus of 10 coins
+             if (job.toString() == "Archer") {
+              coins += 10;  // Add 10 coins if the job is Archer
+             }
+             else if (job.toString() == "Warrior") {
+              maxHP += 150;
+              currentHP = maxHP;
+             }
+    }
+
+    /**
+    * Gets the description of the player
+    *
+    * @return - description of the player
     */
-    virtual string getDescription() const;
+    string getDescription() const;
 
     /**
      * Gets the name of the player
@@ -43,58 +87,76 @@ public:
      *
      * @return - level of the player
     */
-    int getLevel() const;
+    unsigned int getLevel() const;
+
+    /**
+     * Sets the current level of the player
+     */
+    void setLevel(int level);
 
     /**
      * Gets the of force the player has
      *
      * @return - force points of the player
     */
-    int getForce() const;
+    unsigned int getForce() const;
+
+    /**
+    * Sets the force the player has
+    */
+    void setForce(int force);
 
     /**
      * Gets the amount of health points the player currently has
      *
      * @return - health points of the player
     */
-    int getHealthPoints() const;
+    unsigned int getHealthPoints() const;
 
     /**
-     * Gets the amount of coins the player has
+     * Gets the maximum of health points the player can has
      *
-     * @return - coins of the player
+     * @return - max health points of the player
     */
-    int getCoins() const;
+
+    /**
+    * Sets the health points the player has
+    */
+    void setHealthPoints(int force);
+
+    /**
+    * Gets the maxmimum health points the player can have
+    *
+    * @return - the maxmimum health of the player
+    */
+    unsigned int getMaxHP() const;
+
+   /**
+   * Gets the amount of coins the player has
+   *
+   * @return - coins of the player
+   */
+   unsigned int getCoins() const;
+
+   /**
+   * Sets the amount of coins the player has
+   *
+   * @return - coins of the player
+   */
+   void setCoins(int coins);
 
     /**
     * Gets the character of the player
     *
     * @return - character of the player
     */
-    Character& getCharacter() const;
-
-};
-
-class Job : public Player {
-  public:
+    std::unique_ptr<Character>& getCharacter() const;
 
     /**
-    * Calculates the combate power of the player depends on his job
+    * Gets the job of the player
     *
-    * @return - current combat power of the player
+    * @return - job of the player
     */
-    virtual int caculateCombatPower() const;
+    std::unique_ptr<Job>& getJob() const;
+    };
 
-};
-
-class Responsible : public Character {
-  public:
-      string toString() const override;
-
-};
-
-class RiskTaking : public Character {
-  public:
-      string toString() const override;
-
-};

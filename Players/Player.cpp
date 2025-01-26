@@ -5,30 +5,63 @@
 #include "Player.h"
 
 
+    string Player::getDescription() const {
+      string playerName = getName();
+      string playerJob = getJob().toString();
+      string playerChararcter = getCharacter().toString();
+      string playerLevel = std::to_string(getLevel());
+      string playerForce = std::to_string(getForce());
+      return playerName + ", " + playerJob + " with " + playerChararcter +
+        " character (level " + playerLevel + ", force " + playerForce + ")";
+    }
+
     string Player::getName() const{
       return name;
       }
 
 
-    int Player::getLevel() const{
+    unsigned int Player::getLevel() const{
       return level;
       }
 
+    void Player::setLevel(int level){
+      this->level = level;
+    }
 
-    int Player::getForce() const{
+    unsigned int Player::getForce() const{
       return force;
       }
 
+    void Player::setForce(int force){
+          this->force = force;
+        }
 
-    int Player::getHealthPoints() const{
-      return currentHP;
+    unsigned int Player::getHealthPoints() const{
+        return currentHP;
+      }
+
+    void Player::setHealthPoints(int healthPoints){
+        this->currentHP = healthPoints;
+        }
+
+
+    unsigned int Player::getMaxHP() const{
+        return maxHP;
       }
 
 
-    int Player::getCoins() const{
-      return coins;
+    unsigned int Player::getCoins() const{
+        return coins;
       }
 
-    Character& Player::getCharacter() const{
-      return *character;
+    void Player::setCoins(int coins){
+        this->coins = coins;
       }
+
+    std::unique_ptr<Character>& Player::getCharacter() const{
+        return character;
+      }
+
+    std::unique_ptr<Job>& Player::getJob() const {
+      return job;
+    }
