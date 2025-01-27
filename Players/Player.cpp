@@ -5,16 +5,6 @@
 #include "Player.h"
 
 
-    string Player::getDescription() const {
-      string playerName = getName();
-      string playerJob = getJob().toString();
-      string playerChararcter = getCharacter().toString();
-      string playerLevel = std::to_string(getLevel());
-      string playerForce = std::to_string(getForce());
-      return playerName + ", " + playerJob + " with " + playerChararcter +
-        " character (level " + playerLevel + ", force " + playerForce + ")";
-    }
-
     string Player::getName() const{
       return name;
       }
@@ -36,7 +26,7 @@
           this->force = force;
         }
 
-    unsigned int Player::getHealthPoints() const{
+    int Player::getHealthPoints() const{
         return currentHP;
       }
 
@@ -58,10 +48,21 @@
         this->coins = coins;
       }
 
-    std::unique_ptr<Character>& Player::getCharacter() const{
+    const std::unique_ptr<Character>& Player::getCharacter() const{
         return character;
       }
 
-    std::unique_ptr<Job>& Player::getJob() const {
-      return job;
+    const std::unique_ptr<Job>& Player::getJob() const{
+        return job;
     }
+
+
+    string Player::getDescription() const {
+          string playerName = getName();
+          string playerJob = getJob()->getType();
+          string playerCharacter = getCharacter()->getType();
+          string playerLevel = std::to_string(getLevel());
+          string playerForce = std::to_string(getForce());
+          return playerName + ", " + playerJob + " with " + playerCharacter +
+            " character (level " + playerLevel + ", force " + playerForce + ")";
+        }

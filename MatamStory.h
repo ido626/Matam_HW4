@@ -2,15 +2,23 @@
 #pragma once
 
 #include <iostream>
-
 #include "Players/Player.h"
 #include "Events/Event.h"
+#include "Events/EventFactory.h"
 
 
 class MatamStory{
 private:
-    unsigned int m_turnIndex;
+     EventFactory eventFactory; // Map of events
+     unsigned int m_turnIndex;
 
+
+    /**
+     * Create a sorted leaderboard
+     *
+     * @return - std::set of players references
+    */
+    std::set<Player*> createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players);
     /**
      * Playes a single turn for a player
      *
@@ -25,6 +33,7 @@ private:
      *
      * @return - void
     */
+
     void playRound();
 
     /**

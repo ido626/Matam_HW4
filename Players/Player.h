@@ -2,78 +2,68 @@
 #pragma once
 
 #include <string>
-#include <iostream>
+#include <map>
+#include <vector>
+#include <functional>
+#include <stdexcept>
 #include "Job.h"
-
+#include "Character.h"
 
 using namespace std;
 using std::string;
 
-
-class Character {
-  public:
-
-  Character& operator=(const Character& other) { //גם פה
-   if (this->toString() != other.toString()) {
-    cout << "Characters don't match" << endl;
-   }
-   return *this;
-  }
-
-    /**
-    * Gets the character as a string
-    *
-    * @return - string that represents the character of the player
-    */
-    virtual string toString() const;
-};
-
-
-class Responsible : public Character {
-  public:
-     string toString() const override{
-        return "Responsible";
- }
-};
-
-class RiskTaking : public Character {
-   public:
-      string toString() const override{
-        return "RiskTaking";
- }
-};
-
 class Player {
 private:
-  string name;
-  unsigned int level = 1;
-  unsigned int force = 5;
-  unsigned int currentHP = 100;
-  unsigned int maxHP = 100;
-  unsigned int coins = 10;
-  std::unique_ptr<Job> job;
-  std::unique_ptr<Character> character;
+  	string name;
+  	unsigned int level = 1;
+  	unsigned int force = 5;
+  	int currentHP = 100;
+  	unsigned int maxHP = 100;
+  	unsigned int coins = 10;
+  	std::unique_ptr<Job> job;
+  	std::unique_ptr<Character> character;
 
 public:
+    ~Player() = default;
 
-    Player(string name, std::unique_ptr<Job> job, std::unique_ptr<Character> character)
-         : name(std::move(name)), job(std::move(job)), character(std::move(character)) {
-             // Check if the job is an Archer and apply a bonus of 10 coins
-             if (job.toString() == "Archer") {
-              coins += 10;  // Add 10 coins if the job is Archer
-             }
-             else if (job.toString() == "Warrior") {
-              maxHP += 150;
-              currentHP = maxHP;
-             }
+//std::unique_ptr<Job> job, std::unique_ptr<Character> character
+//    Player(string name, string job, string character){
+//      	this->name = name;
+//      	if (job == "Warrior") {
+//        	this->job = std::make_unique<Warrior>();
+//            maxHP = 150; //Warrior's Max HP is 150
+//          	currentHP = maxHP; //Setting current health as the max health
+//        }
+//        else if (job == "Magician") {
+//        	this->job = std::make_unique<Magician>();
+//        }
+//        else if (job == "Archer") {
+//            this->job = std::make_unique<Archer>();
+//            coins += 10;  // Add 10 coins if the job is Archer
+//        }
+//        else {
+//            throw std::runtime_error("Invalid Players File");
+//		}
+//        if (character == "Responsible") {
+//          	this->character = std::make_unique<Responsible>();
+//        }
+//        else if (character == "RiskTaking") {
+//          	this->character = std::make_unique<RiskTaking>();
+//        }
+//		else {
+//            throw std::runtime_error("Invalid Players File");
+//        }
+//  	}
+  Player(std::string name, std::unique_ptr<Job> job, std::unique_ptr<Character> character)
+    : name(std::move(name)), job(std::move(job)), character(std::move(character)) {
+    if (this->job->getType() == "Warrior") {
+        maxHP = 150;
+        currentHP = maxHP;
     }
-
-    /**
-    * Gets the description of the player
-    *
-    * @return - description of the player
-    */
-    string getDescription() const;
+    else if (this->job->getType() == "Archer") {
+        coins += 10;
+    }
+}
 
     /**
      * Gets the name of the player
@@ -111,25 +101,19 @@ public:
      *
      * @return - health points of the player
     */
-    unsigned int getHealthPoints() const;
+   int getHealthPoints() const;
 
-    /**
-     * Gets the maximum of health points the player can has
-     *
-     * @return - max health points of the player
-    */
+   /**
+   * Sets the health points the player has
+   */
+   void setHealthPoints(int force);
 
-    /**
-    * Sets the health points the player has
-    */
-    void setHealthPoints(int force);
-
-    /**
-    * Gets the maxmimum health points the player can have
-    *
-    * @return - the maxmimum health of the player
-    */
-    unsigned int getMaxHP() const;
+   /**
+   * Gets the maximum health points the player can have
+   *
+   * @return - the maximum health of the player
+   */
+   unsigned int getMaxHP() const;
 
    /**
    * Gets the amount of coins the player has
@@ -150,13 +134,91 @@ public:
     *
     * @return - character of the player
     */
-    std::unique_ptr<Character>& getCharacter() const;
+    const std::unique_ptr<Character>& getCharacter() const;
 
     /**
     * Gets the job of the player
     *
     * @return - job of the player
     */
-    std::unique_ptr<Job>& getJob() const;
-    };
+    const std::unique_ptr<Job>& getJob() const;
+
+     /**
+    * Gets the description of the player
+    *
+    * @return - description of the player
+    */
+    string getDescription() const;
+
+    /**
+    * Overloaded version of the < operator
+    *
+    */
+
+    bool operator<(const Player &other) const {
+        if (this->level == other.level) {
+            if (this->coins == other.coins) {
+                return name > other.name;
+            }
+            return coins > other.coins;
+        }
+        return level > other.level;
+    }
+
+
+};
+
+class PlayerFactory {
+private:
+        // Maps for job and character creation
+        map<string, function<unique_ptr<Job>()>> jobFactoryMap;
+        map<string, function<unique_ptr<Character>()>> characterFactoryMap;
+public:
+        static std::vector<std::unique_ptr<Player>> playerList;
+
+        ~PlayerFactory() = default;
+
+        PlayerFactory(){
+        // Register Jobs
+        jobFactoryMap["Warrior"] = []() { return make_unique<Warrior>(); };
+        jobFactoryMap["Magician"] = []() { return make_unique<Magician>(); };
+        jobFactoryMap["Archer"] = []() { return make_unique<Archer>(); };
+
+        // Register Characters
+        characterFactoryMap["Responsible"] = []() { return make_unique<Responsible>(); };
+        characterFactoryMap["RiskTaking"] = []() { return make_unique<RiskTaking>(); };
+      	}
+
+    	// Add a new job dynamically
+        void registerJob(const string& jobName, const function<unique_ptr<Job>()> &jobCreator){
+            jobFactoryMap[jobName] = jobCreator;
+        }
+
+        // Add a new character dynamically
+        void registerCharacter(const string& characterName, const function<unique_ptr<Character>()> &characterCreator){
+          characterFactoryMap[characterName] = characterCreator;
+        }
+
+        // Create Player
+         unique_ptr<Player> createPlayer(const string& name, const string& job, const string& character) const{
+			// Check if the job exists
+            auto jobIt = jobFactoryMap.find(job);
+            if (jobIt == jobFactoryMap.end()) {
+                throw std::runtime_error("Invalid Players File.");
+            }
+
+            // Check if the character exists
+            auto characterIt = characterFactoryMap.find(character);
+            if (characterIt == characterFactoryMap.end()) {
+                throw std::runtime_error("Invalid Players File.");
+            }
+
+            // Create the job and the character
+            auto jobPtr = jobIt->second();
+            auto characterPtr = characterIt->second();
+
+            // Create the player with the generate job and character
+            return make_unique<Player>(name, std::move(jobPtr), std::move(characterPtr));
+        }
+};
 

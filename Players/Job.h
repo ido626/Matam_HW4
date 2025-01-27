@@ -3,58 +3,52 @@
 //
 #pragma once
 
+#include <string>
+using namespace std;
 class Player;
 
-using namespace std;
-using std::string;
 
 class Job {
 public:
-    Job& operator=(const Job& other) { //לא סגור על זה איך לממש את זה והאם זה צריך להיות בפאבליק
-        if (this->toString() != other.toString()) {
+    virtual ~Job() = default;
 
-        }
-        return *this;
-
-    }
     /**
     * Calculates the combat power of the player depends on his job
     *
     * @return - current combat power of the player
     */
-    virtual unsigned int calculateCombatPower(Player& player) const{
-        return player.getForce() + player.getLevel();
-    }
+    virtual unsigned int calculateCombatPower(const Player& player) const;
 
     /**
      * Gets the job of the player as a string
      *
      * @return - string that represents the job of the player
      */
-    virtual string toString() const;
+    virtual string getType() = 0;
+
+    /**
+     * Applying 'Solar Eclipse' event
+     */
+    virtual string solarEclipse(Player& player);
 };
 
 class Warrior : public Job {
 public:
-    unsigned int calculateCombatPower(Player& player) const override {
-        return player.getForce()*2 + player.getLevel();
-    }
-    string toString() const override{
-        return "Warrior";
-    }
+    ~Warrior() override;
+    unsigned int calculateCombatPower(const Player& player) const override;
+    string getType() override;
 };
 
 class Magician : public Job {
 public:
-    string toString() const override{
-        return "Magician";
-    }
+    ~Magician() override;
+    string solarEclipse(Player& player) override;
+    string getType() override;
 };
 
 class Archer : public Job {
 public:
-    string toString() const override{
-        return "Archer";
-    }
+    ~Archer() override;
+    string getType() override;
 };
 
