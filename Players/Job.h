@@ -5,11 +5,8 @@
 
 #include <string>
 
-/*#include "../Utilities.h"*/
-
 using namespace std;
 class Player;
-
 
 class Job {
 public:
@@ -27,7 +24,7 @@ public:
      *
      * @return - string that represents the job of the player
      */
-    virtual std::string getType();
+    virtual std::string getType() = 0;
 
     /**
      * Applying 'Solar Eclipse' event
@@ -37,28 +34,28 @@ public:
 
 class Warrior : public Job {
 public:
-    ~Warrior() override;
+    ~Warrior() override = default;
     unsigned int calculateCombatPower(const Player& player) const override ; /*{
         return player.getForce()*2 + player.getLevel();
     }*/
-    std::string solarEclipse(Player& player) override;
+    // std::string solarEclipse(Player& player) override;
     std::string getType() override ;/*{return "Warrior";}*/
 };
 
 class Magician : public Job {
 public:
-    ~Magician() override;
+    ~Magician() override = default;
 
     std::string solarEclipse(Player& player) override;
-    unsigned int calculateCombatPower(const Player& player) const override ;
+    // unsigned int calculateCombatPower(const Player& player) const override ;
     std::string getType() override; /*{ return "Magician";}*/
 };
 
 class Archer : public Job {
 public:
-    ~Archer() override;
-    std::string solarEclipse(Player& player) override;
-    unsigned int calculateCombatPower(const Player& player) const override ;
+    ~Archer() override = default;
+    // std::string solarEclipse(Player& player) override;
+    // unsigned int calculateCombatPower(const Player& player) const override ;
     std::string getType() override ;/*{return "Archer";}*/
 };
 

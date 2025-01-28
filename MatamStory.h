@@ -2,8 +2,6 @@
 #pragma once
 
 #include <iostream>
-#include "Players/Player.h"
-#include "Events/Event.h"
 #include "Events/EventFactory.h"
 #include <set>
 
@@ -20,7 +18,7 @@ private:
     */
     std::set<Player*> createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players);
     /**
-     * Playes a single turn for a player
+     * Plays a single turn for a player
      *
      * @param player - the player to play the turn for
      *

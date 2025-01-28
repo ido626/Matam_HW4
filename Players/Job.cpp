@@ -2,10 +2,7 @@
 // Created by Ido Amit on 26/01/2025.
 //
 
-#include "Player.h"
-#include "Job.h"
 #include "../Utilities.h"
-
 
 unsigned int Job::calculateCombatPower(const Player& player) const {
     return player.getForce() + player.getLevel();

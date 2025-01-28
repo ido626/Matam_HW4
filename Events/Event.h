@@ -6,11 +6,10 @@
 #include <string>
 #include "../Players/Player.h"
 
-class Monster;
 
 
 class Event {
-    protected:
+protected:
     unsigned int CombatPower = 0 ;
     unsigned int Loot = 0 ;
     unsigned int Damage = 0 ;
@@ -28,12 +27,13 @@ public:
      */
     static std::vector<std::string> events;
 
-   	virtual string applyEvent(Player& player);
+    virtual string applyEvent(Player& player) = 0;
+};
 /*
     virtual int solarEclipse(Player& player)const;
     virtual int potionMerchant(Player& player)const;
 */
-};
+
 
 /*
 class Encounter {

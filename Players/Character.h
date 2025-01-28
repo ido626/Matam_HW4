@@ -1,13 +1,9 @@
 //
 // Created by Ido Amit on 26/01/2025.
 //
-
 #pragma once
 
-
 class Player;
-
-
 
 class Character {
 public:
@@ -17,17 +13,17 @@ public:
     *
     * @return - string that represents the character of the player
     */
-    virtual std::string getType();
+    virtual std::string getType() = 0;
 
     /**
     * Applying 'Potion Merchant' event
     */
-    virtual std::string potionMerchant(Player& player);
+    virtual std::string potionMerchant(Player& player) = 0;
 };
 
 class Responsible : public Character {
 public:
-    ~Responsible() override;
+    ~Responsible() override = default;
     std::string potionMerchant(Player& player) override; /* {
 
             unsigned int potionAmount = 0;
@@ -47,7 +43,7 @@ public:
 
 class RiskTaking : public Character {
 public:
-    ~RiskTaking() override;
+    ~RiskTaking() override = default;
 
     std::string potionMerchant(Player& player) override ;/* {
         int potionAmount = 0;

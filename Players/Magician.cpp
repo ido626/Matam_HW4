@@ -2,10 +2,9 @@
 // Created by Ido Amit on 26/01/2025.
 //
 
-#include "Player.h"
-#include "Job.h"
-#include "../Utilities.h"
 #include <string>
+#include "../Utilities.h"
+
 
 std::string Magician::solarEclipse(Player& player){
     unsigned int currForce = player.getForce();
@@ -13,9 +12,9 @@ std::string Magician::solarEclipse(Player& player){
     return getSolarEclipseMessage(player, 1);
 }
 
-unsigned int Magician::calculateCombatPower(const Player& player) const {
-    return player.getForce() + player.getLevel();
-}
+// unsigned int Magician::calculateCombatPower(const Player& player) const {
+//     return player.getForce() + player.getLevel();
+// }
 
 std::string  Magician::getType(){
     return "Magician";

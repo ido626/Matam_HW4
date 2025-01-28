@@ -3,7 +3,6 @@
 //
 #include <string>
 #include "../Utilities.h"
-#include "Player.h"
 
 std::string RiskTaking::potionMerchant(Player& player) {
     int potionAmount = 0;

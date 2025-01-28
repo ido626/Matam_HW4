@@ -6,7 +6,6 @@
 #include <set>
 #include <stdexcept>
 #include "MatamStory.h"
-#include "Utilities.h"
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
 

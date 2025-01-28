@@ -3,10 +3,7 @@
 //
 #pragma once
 #include <functional>
-#include "Event.h"
 #include "Monster.h"
-
-
 
 /**************     factory   ********************/
 /**

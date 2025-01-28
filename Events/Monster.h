@@ -3,9 +3,7 @@
 //
 #pragma once
 
-#include "Event.h"
-#include "Encounter.h"
-#include "../Players/Player.h"
+#include "../Utilities.h"
 
 /** Base class Monster **/
 
@@ -28,8 +26,7 @@ class Monster:public Event{ // the base class
     virtual void updateCombatPower(){}
 
     string applyEvent(Player &player) override {
-        unique_ptr<Encounter> encounter = make_unique<Encounter>();
-        return encounter->applyBattle(player, *this);
+        return applyBattle(player);
     }
 
     [[nodiscard]] string getDescription() const override {
@@ -43,6 +40,23 @@ class Monster:public Event{ // the base class
     [[nodiscard]] virtual unsigned int getCombatPower() const {return CombatPower;};
     [[nodiscard]] virtual unsigned int getLoot() const {return Loot;};
     [[nodiscard]] virtual unsigned int getDamage() const {return Damage;};
+
+
+    std::string applyBattle(Player& player) const {
+        unsigned int playerCP = player.getJob()->calculateCombatPower(player);
+        if (playerCP > getDamage()) { // Player wins the fight
+            player.setLevel(player.getLevel() + 1);
+            player.setCoins(player.getCoins() + getLoot());
+            if (player.getJob()->getType() == "Warrior") {
+                player.setHealthPoints(player.getHealthPoints() - 10);
+            }
+            return getEncounterWonMessage(player, getLoot());
+        }
+        else { // Player loses the battle
+            player.setHealthPoints(player.getHealthPoints() - getDamage());
+            return getEncounterLostMessage(player, getDamage());
+        }
+    }
 };
 
 class Snail: public Monster {
@@ -64,8 +78,7 @@ class Balrog: public Monster {
     }
 
     string applyEvent(Player &player) override {
-        unique_ptr<Encounter> encounter = make_unique<Encounter>();
-        string outcome = encounter->applyBattle(player, *this);
+        std::string outcome = applyBattle(player);
         updateCombatPower();
         return outcome;
     }

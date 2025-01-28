@@ -2,14 +2,12 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <map>
 #include <vector>
 #include <functional>
 #include <stdexcept>
 #include "Job.h"
 #include "Character.h"
-/*#include "../Utilities.h"*/
 
 using namespace std;
 using std::string;
