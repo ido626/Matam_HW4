@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Event.h"
+#include "Encounter.h"
 #include "../Players/Player.h"
 
 /** Base class Monster **/
@@ -27,7 +28,7 @@ class Monster:public Event{ // the base class
     virtual void updateCombatPower(){}
 
     string applyEvent(Player &player) override {
-        unique_ptr encounter = make_unique<Encounter>();
+        unique_ptr<Encounter> encounter = make_unique<Encounter>();
         return encounter->applyBattle(player, *this);
     }
 
@@ -63,7 +64,7 @@ class Balrog: public Monster {
     }
 
     string applyEvent(Player &player) override {
-        unique_ptr encounter = make_unique<Encounter>();
+        unique_ptr<Encounter> encounter = make_unique<Encounter>();
         string outcome = encounter->applyBattle(player, *this);
         updateCombatPower();
         return outcome;

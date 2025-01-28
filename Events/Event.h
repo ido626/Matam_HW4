@@ -35,12 +35,14 @@ public:
 */
 };
 
+/*
 class Encounter {
 public:
     Encounter() = default;
     ~Encounter() = default;
-     std::string applyBattle(Player& player, Monster& monster);
+    std::string applyBattle(Player& player, Monster& monster);
 };
+*/
 
 class SolarEclipse : public Event {
 public:
