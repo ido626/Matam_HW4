@@ -3,15 +3,20 @@
 //
 
 #include "Player.h"
+#include "Job.h"
 #include "../Utilities.h"
 #include <string>
 
-string solarEclipse(Player& player){
+std::string Magician::solarEclipse(Player& player){
     unsigned int currForce = player.getForce();
     player.setForce(++currForce);
     return getSolarEclipseMessage(player, 1);
 }
 
-string getType(){
+unsigned int Magician::calculateCombatPower(const Player& player) const {
+    return player.getForce() + player.getLevel();
+}
+
+std::string  Magician::getType(){
     return "Magician";
 }

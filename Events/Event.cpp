@@ -2,12 +2,10 @@
 // Created by Daniel Agmon on 17/01/2025.
 //
 #include <vector>
-#include <iostream>
-
 #include "Event.h"
 
 
-string Event::getDescription() const{return""; }
+std::string Event::getDescription() const{return""; }
 
 std::vector<std::string> Event::events {}; // initialization of events vector
 /*

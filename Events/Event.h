@@ -4,16 +4,16 @@
 
 #include <vector>
 #include <string>
-#include <map>
-#include <stdexcept>
 #include "../Players/Player.h"
+
 class Monster;
+
 
 class Event {
     protected:
     unsigned int CombatPower = 0 ;
-    int Loot = 0 ;
-    int Damage = 0 ;
+    unsigned int Loot = 0 ;
+    unsigned int Damage = 0 ;
 
 public:
     virtual ~Event() = default;
@@ -39,7 +39,7 @@ class Encounter {
 public:
     Encounter() = default;
     ~Encounter() = default;
-    string applyBattle(Player& player, Monster& monster);
+     std::string applyBattle(Player& player, Monster& monster);
 };
 
 class SolarEclipse : public Event {

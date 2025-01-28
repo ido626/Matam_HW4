@@ -5,7 +5,7 @@
 #include "../Utilities.h"
 #include "Player.h"
 
-string potionMerchant(Player& player) {
+std::string RiskTaking::potionMerchant(Player& player) {
     int potionAmount = 0;
     if (player.getHealthPoints() < 50 && player.getCoins()>=5) {
         player.setHealthPoints(player.getHealthPoints() + 10) ;
@@ -16,6 +16,6 @@ string potionMerchant(Player& player) {
 
 }
 
-string getType(){
+std::string RiskTaking::getType(){
     return "RiskTaking";
 }

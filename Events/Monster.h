@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Event.h"
+#include "../Players/Player.h"
 
 /** Base class Monster **/
 
@@ -13,13 +14,14 @@ class Monster:public Event{ // the base class
 
     public:
     /** constructor & destructor **/
-    Monster(std::string  name ,unsigned int power, int loot, int damage)
+    Monster(std::string  name ,unsigned int power, unsigned int loot, unsigned int damage)
         :monsterName(std::move(name)) {
         CombatPower = power;
         Loot = loot;
         Damage = damage;
     }
-    virtual ~Monster() = default;
+
+    ~Monster() override = default;
 
     /** update combat power pure virtual (for balrog) */
     virtual void updateCombatPower(){}
@@ -38,8 +40,8 @@ class Monster:public Event{ // the base class
 
     /** getters **/
     [[nodiscard]] virtual unsigned int getCombatPower() const {return CombatPower;};
-    [[nodiscard]] virtual int getLoot() const {return Loot;};
-    [[nodiscard]] virtual int getDamage() const {return Damage;};
+    [[nodiscard]] virtual unsigned int getLoot() const {return Loot;};
+    [[nodiscard]] virtual unsigned int getDamage() const {return Damage;};
 };
 
 class Snail: public Monster {
@@ -92,8 +94,8 @@ public:
         return combinedPower;
     }
 
-    [[nodiscard]] int getLoot() const override {
-        int combinedLoot = 0;
+    [[nodiscard]] unsigned int getLoot() const override {
+        unsigned int combinedLoot = 0;
 
         for (const auto&i : monstersPack) {
             combinedLoot += i->getLoot();
@@ -101,8 +103,8 @@ public:
         return combinedLoot;
     }
 
-    [[nodiscard]] int getDamage() const override {
-        int combinedDamage = 0;
+    [[nodiscard]] unsigned int getDamage() const override {
+        unsigned int combinedDamage = 0;
 
         for (const auto&i : monstersPack) {
             combinedDamage += i->getDamage();

@@ -5,7 +5,7 @@
 #include "Players/Player.h"
 #include "Events/Event.h"
 #include "Events/EventFactory.h"
-
+#include <set>
 
 class MatamStory{
 private:

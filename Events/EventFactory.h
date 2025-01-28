@@ -5,7 +5,8 @@
 #include <functional>
 #include "Event.h"
 #include "Monster.h"
-#include "Encounter.cpp"
+#include "Encounter.cpp" // ???
+
 
 /**************     factory   ********************/
 /**

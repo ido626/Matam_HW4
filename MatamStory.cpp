@@ -71,7 +71,7 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
       	throw runtime_error("Invalid Players File");
     }
     /*============================================*/
-    this->m_turnIndex = 1;
+    this->m_turnIndex = 0;
 }
 
 std::set<Player*> MatamStory::createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players) {
@@ -93,7 +93,7 @@ void MatamStory::playTurn(Player& player) {
     unique_ptr<Event> currEvent = eventFactory.createEvent(currEventString);
 
      /** 2. Print the turn details with "printTurnDetails"*/
-    printTurnDetails(m_turnIndex, player, *currEvent);
+    printTurnDetails(m_turnIndex +1 , player, *currEvent);
 
      /** 3. Play the event */
     string outcome = currEvent->applyEvent(player);
@@ -153,7 +153,7 @@ bool MatamStory::isGameOver() const {
 void MatamStory::play() {
     printStartMessage();
     /*===== TODO: Print start message entry for each player using "printStartPlayerEntry" =====*/
-    for (int i = 0; i < PlayerFactory::playerList.size(); i++) {
+    for (size_t i = 0; i < PlayerFactory::playerList.size(); i++) {
         printStartPlayerEntry(i + 1, *PlayerFactory::playerList[i]);
     }
     /*=========================================================================================*/

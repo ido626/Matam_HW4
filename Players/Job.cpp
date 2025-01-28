@@ -6,11 +6,11 @@
 #include "../Utilities.h"
 
 
-unsigned int calculateCombatPower(const Player& player){
+unsigned int Job::calculateCombatPower(const Player& player) const {
     return player.getForce() + player.getLevel();
 }
 
-string solarEclipse(Player& player){
+std::string Job::solarEclipse(Player& player){
     unsigned int currForce = player.getForce();
     if (currForce <= 0) {
         return getSolarEclipseMessage(player, 0);

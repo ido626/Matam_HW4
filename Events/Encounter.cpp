@@ -1,10 +1,12 @@
 //
 // Created by Ido Amit on 27/01/2025.
 //
+#include "Event.h"
 #include "Monster.h"
 #include "../Utilities.h"
+#include "../Players/Player.h"
 
-string applyBattle(Player& player, Monster& monster) {
+ std::string Encounter::applyBattle(Player& player, Monster& monster) {
     unsigned int playerCP = player.getJob()->calculateCombatPower(player);
     if (playerCP > monster.getDamage()) { // Player wins the fight
         player.setLevel(player.getLevel() + 1);
@@ -19,3 +21,4 @@ string applyBattle(Player& player, Monster& monster) {
         return getEncounterLostMessage(player, monster.getDamage());
     }
 }
+
