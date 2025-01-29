@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
+#include <memory> //this was missing
 #include "Job.h"
 #include "Character.h"
 
@@ -19,7 +20,7 @@ private:
   	string name;
   	unsigned int level = 1;
   	unsigned int force = 5;
-  	int currentHP = 100;
+  	unsigned int currentHP = 100;
   	unsigned int maxHP = 100;
   	unsigned int coins = 10;
   	std::unique_ptr<Job> job;
@@ -103,7 +104,7 @@ public:
      *
      * @return - health points of the player
     */
-   int getHealthPoints() const;
+   unsigned int getHealthPoints() const;
 
    /**
    * Sets the health points the player has
@@ -166,6 +167,17 @@ public:
         }
         return level > other.level;
     }
+    // bool operator<(const Player &other) const {
+    //     if (level != other.level) {
+    //         return level > other.level;  // Higher level first
+    //     }
+    //     if (coins != other.coins) {
+    //         return coins > other.coins;  // Higher coins first
+    //     }
+    //     return name < other.name;  // Alphabetical order as a tiebreaker
+    // }
+
+
 
 
 };

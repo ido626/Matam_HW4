@@ -15,6 +15,7 @@ protected:
     unsigned int Damage = 0 ;
 
 public:
+
     virtual ~Event() = default;
     /**
      * Gets the Name of the event
@@ -25,30 +26,20 @@ public:
     /**
      * a vector contains all events (input),ordered the same as in eventsStream file
      */
-    static std::vector<std::string> events;
+    static std::vector<std::unique_ptr<Event>> eventList;
 
     virtual string applyEvent(Player& player) = 0;
 };
-/*
-    virtual int solarEclipse(Player& player)const;
-    virtual int potionMerchant(Player& player)const;
-*/
-
-
-/*
-class Encounter {
-public:
-    Encounter() = default;
-    ~Encounter() = default;
-    std::string applyBattle(Player& player, Monster& monster);
-};
-*/
 
 class SolarEclipse : public Event {
 public:
     SolarEclipse()= default;
 	string applyEvent(Player& player) override {
         return player.getJob()->solarEclipse(player);
+	}
+    [[nodiscard]] string getDescription() const override {
+	    return "SolarEclipse";
+
 	}
 };
 
@@ -58,6 +49,11 @@ public:
  	string applyEvent(Player& player) override {
     	return player.getCharacter()->potionMerchant(player);
     }
+
+    [[nodiscard]] string getDescription() const override {
+ 	    return "PotionMerchant";
+
+ 	}
 };
 
 /*

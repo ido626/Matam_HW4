@@ -7,7 +7,9 @@
 
 std::string Event::getDescription() const{return""; }
 
-std::vector<std::string> Event::events {}; // initialization of events vector
+std::vector<std::unique_ptr<Event>> Event::eventList{};
+
+//std::vector<std::string> Event::events {}; // initialization of events vector
 /*
 std::unique_ptr<Event> Event::createEvent(const std::string &eventName) {
     if (eventName == "Snail") {

@@ -26,7 +26,7 @@
           this->force = force;
         }
 
-    int Player::getHealthPoints() const{
+    unsigned int Player::getHealthPoints() const{
         return currentHP;
       }
 

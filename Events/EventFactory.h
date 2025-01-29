@@ -21,8 +21,8 @@ public:
         eventFactoryMap["Slime"] = [](){return std::make_unique<Slime>();};
         eventFactoryMap["Balrog"] = []() { return std::make_unique<Balrog>(); };
         eventFactoryMap["Pack"] = []() { return std::make_unique<Pack>(); };
-        eventFactoryMap["Solar Eclipse"] = []() { return std::make_unique<SolarEclipse>(); };
-        eventFactoryMap["Potion Merchant"] = []() { return std::make_unique<PotionMerchant>(); };
+        eventFactoryMap["SolarEclipse"] = []() { return std::make_unique<SolarEclipse>(); };
+        eventFactoryMap["PotionsMerchant"] = []() { return std::make_unique<PotionMerchant>(); };
     }
 
     [[nodiscard]] std::unique_ptr<Event> createEvent(const std::string& eventName) const {

@@ -7,7 +7,7 @@
 std::string Responsible::potionMerchant(Player& player) {
     unsigned int potionAmount = 0;
     if (player.getCharacter()->getType() == "Responsible") {
-        while (static_cast<int>(player.getMaxHP()) > player.getHealthPoints() && player.getCoins() >= 5 ) {
+        while (player.getMaxHP() > player.getHealthPoints() && player.getCoins() >= 5 ) {
             player.setHealthPoints(player.getHealthPoints()+ 10) ;
             player.setCoins(player.getCoins()- 5);
             potionAmount++;

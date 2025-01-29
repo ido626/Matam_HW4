@@ -47,15 +47,16 @@ public:
     ~Magician() override = default;
 
     std::string solarEclipse(Player& player) override;
-    // unsigned int calculateCombatPower(const Player& player) const override ;
-    std::string getType() override; /*{ return "Magician";}*/
+
+    std::string getType() override;
 };
 
 class Archer : public Job {
 public:
     ~Archer() override = default;
-    // std::string solarEclipse(Player& player) override;
-    // unsigned int calculateCombatPower(const Player& player) const override ;
+
     std::string getType() override ;/*{return "Archer";}*/
 };
+
+
 

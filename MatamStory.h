@@ -9,14 +9,14 @@ class MatamStory{
 private:
      EventFactory eventFactory; // Map of events
      unsigned int m_turnIndex;
-
-
-    /**
+ /**
      * Create a sorted leaderboard
      *
      * @return - std::set of players references
     */
-    std::set<Player*> createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players);
+
+    //std::set<Player *> createLeaderBoard(const std::vector<std::unique_ptr<Player>> &players);
+    std::vector<Player*>createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players);
     /**
      * Plays a single turn for a player
      *
@@ -42,6 +42,8 @@ private:
     bool isGameOver() const;
 
 public:
+
+
     /**
      * Constructor of MatamStory class
      *
@@ -53,12 +55,14 @@ public:
     */
     MatamStory(std::istream& eventsStream, std::istream& playersStream);
 
-    /**
+
+
+     /**
      * Plays the entire game
      *
      * @return - void
     */
     void play();
 
-
 };
+

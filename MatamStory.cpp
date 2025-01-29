@@ -33,12 +33,11 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
                     throw std::runtime_error("Invalid Events File");
                 }
             }
-
-            auto pack = Pack::createPack(std::move(packMembers));
-            Event::events.push_back(pack->getDescription());
+            auto pack = Pack::createPack(std::move(packMembers));  // Move to avoid copying
+            Event::eventList.push_back(std::move(pack)); // Move to avoid copy error
         } else {
-            auto event = eventFactory.createEvent(eventName);
-            Event::events.push_back(event->getDescription());
+            auto currEvent = eventFactory.createEvent(eventName);
+            Event::eventList.push_back(std::move(currEvent)); // Move to avoid copy error
         }
     }
         /*==========================================*/
@@ -73,13 +72,32 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
     this->m_turnIndex = 0;
 }
 
-std::set<Player*> MatamStory::createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players) {
-    std::set<Player*> leaderBoard;
+// std::set<Player*> MatamStory::createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players) {
+//     std::set<Player*> leaderBoard;
+//     for (const auto& player : players) {
+//         leaderBoard.insert(player.get()); // Use the raw pointer from unique_ptr
+//     }
+//     return leaderBoard;
+// }
+
+std::vector<Player*> MatamStory::createLeaderBoard(const std::vector<std::unique_ptr<Player>>& players) {
+    std::vector<Player*> leaderBoard;
+
+    // Insert raw pointers into the leaderboard vector
     for (const auto& player : players) {
-        leaderBoard.insert(player.get()); // Use the raw pointer from unique_ptr
+        leaderBoard.push_back(player.get());
     }
+
+    // Sort the leaderboard using the < operator
+    std::sort(leaderBoard.begin(), leaderBoard.end(), [](Player* lhs, Player* rhs) {
+        return *lhs < *rhs;  // Compare players using the overloaded < operator
+    });
+
     return leaderBoard;
 }
+
+
+
 
 
 
@@ -88,14 +106,16 @@ void MatamStory::playTurn(Player& player) {
     /**
      * Steps to implement (there may be more, depending on your design):
      * 1. Get the next event from the events list*/
-	const string& currEventString = Event::events[m_turnIndex % Event::events.size()];
-    unique_ptr<Event> currEvent = eventFactory.createEvent(currEventString);
+    int size = Event::eventList.size();
+    int currEventIndex = m_turnIndex % size;
+    unique_ptr<Event> currEvent = std::move(Event::eventList[currEventIndex]); // Taking ownership
 
      /** 2. Print the turn details with "printTurnDetails"*/
-    printTurnDetails(m_turnIndex +1 , player, *currEvent);
+    printTurnDetails(m_turnIndex + 1 , player, *currEvent);
 
      /** 3. Play the event */
     string outcome = currEvent->applyEvent(player);
+    Event::eventList[currEventIndex] = std::move(currEvent); // Returning ownership
 
      /** 4. Print the turn outcome with "printTurnOutcome"*/
     printTurnOutcome(outcome);
@@ -119,12 +139,20 @@ void MatamStory::playRound() {
     printLeaderBoardMessage();
 
     /*===== TODO: Print leaderboard entry for each player using "printLeaderBoardEntry" =====*/
-    set<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
-    int i = 0;
-    for (auto player : leaderBoard) {
+    // set<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
+    // int i = 1;
+    // for (auto player : leaderBoard) {
+    //     printLeaderBoardEntry(i, *player);
+    //     i++;
+    // }
+    std::vector<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
+    int i = 1;
+    for (auto* player : leaderBoard) {
         printLeaderBoardEntry(i, *player);
         i++;
     }
+
+
     /*=======================================================================================*/
 
     printBarrier();
@@ -165,7 +193,8 @@ void MatamStory::play() {
     printGameOver();
     /*===== TODO: Print either a "winner" message or "no winner" message =====*/
     // Create a leaderboard
-    set<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
+    //set<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
+    std::vector<Player*> leaderBoard = createLeaderBoard(PlayerFactory::playerList);
     // Check if there's a winner
     auto candidate = *leaderBoard.begin();
     if ((*leaderBoard.begin())->getLevel() == 10) {
@@ -176,3 +205,4 @@ void MatamStory::play() {
     }
     /*========================================================================*/
 }
+

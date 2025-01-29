@@ -53,9 +53,12 @@ class Monster:public Event{ // the base class
             return getEncounterWonMessage(player, getLoot());
         }
         else { // Player loses the battle
-            player.setHealthPoints(player.getHealthPoints() - getDamage());
+            if (player.getHealthPoints() > getDamage()) {// player stays alive
+                player.setHealthPoints(player.getHealthPoints() - getDamage());
+            }else { player.setHealthPoints(0);}
             return getEncounterLostMessage(player, getDamage());
         }
+
     }
 };
 
