@@ -51,49 +51,7 @@ public:
     }
 
     [[nodiscard]] string getDescription() const override {
- 	    return "PotionMerchant";
+ 	    return "PotionsMerchant";
 
  	}
 };
-
-/*
-    class SolarEclipse: public Event {
-
-    public:
-        int solarEclipse(Player& player)const override {
-            int affect =0;
-            if (player.getJob().toString() == "Magician") {
-                player.setForce(getForce()+1);
-                affect = 1;
-                return affect;
-            }else {player.setForce(getForce()-1);
-                affect = -1;
-                return affect;}
-        }
-    };
-
-
-    class PotionMerchant:public Event {
-    public:
-        int potionMerchant(Player& player)const override{
-            int potionAmount = 0;
-            if (player.getCharacter().toString() == "Responsible") {
-                while (player.getMaxHP() > player.getHealthPoints() && player.getCoins() >= 5 ) {
-                    player.setHealthPoints(player.getHealthPoints()+ 10) ;
-                    player.setCoins(player.getCoins()- 5);
-                    potionAmount++;
-                }
-            }else if (player.getCharacter().toString() == "RiskTaking") {
-                if (player.getHealthPoints() < 50 && player.getCoins()>=5) {
-                    player.setHealthPoints(player.getHealthPoints() + 10) ;
-                    player.setCoins(player.getCoins()- 5);
-                    potionAmount++;
-                }
-            }
-            return potionAmount;
-        }
-    };
-
-};
-
-*/

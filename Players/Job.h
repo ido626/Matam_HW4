@@ -35,11 +35,10 @@ public:
 class Warrior : public Job {
 public:
     ~Warrior() override = default;
-    unsigned int calculateCombatPower(const Player& player) const override ; /*{
-        return player.getForce()*2 + player.getLevel();
-    }*/
-    // std::string solarEclipse(Player& player) override;
-    std::string getType() override ;/*{return "Warrior";}*/
+
+    unsigned int calculateCombatPower(const Player& player) const override ;
+
+    std::string getType() override ;
 };
 
 class Magician : public Job {
@@ -55,7 +54,7 @@ class Archer : public Job {
 public:
     ~Archer() override = default;
 
-    std::string getType() override ;/*{return "Archer";}*/
+    std::string getType() override ;
 };
 
 

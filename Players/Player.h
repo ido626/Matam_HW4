@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
+#include <sstream>
 #include <memory> //this was missing
 #include "Job.h"
 #include "Character.h"
@@ -29,34 +30,6 @@ private:
 public:
     ~Player() = default;
 
-//std::unique_ptr<Job> job, std::unique_ptr<Character> character
-//    Player(string name, string job, string character){
-//      	this->name = name;
-//      	if (job == "Warrior") {
-//        	this->job = std::make_unique<Warrior>();
-//            maxHP = 150; //Warrior's Max HP is 150
-//          	currentHP = maxHP; //Setting current health as the max health
-//        }
-//        else if (job == "Magician") {
-//        	this->job = std::make_unique<Magician>();
-//        }
-//        else if (job == "Archer") {
-//            this->job = std::make_unique<Archer>();
-//            coins += 10;  // Add 10 coins if the job is Archer
-//        }
-//        else {
-//            throw std::runtime_error("Invalid Players File");
-//		}
-//        if (character == "Responsible") {
-//          	this->character = std::make_unique<Responsible>();
-//        }
-//        else if (character == "RiskTaking") {
-//          	this->character = std::make_unique<RiskTaking>();
-//        }
-//		else {
-//            throw std::runtime_error("Invalid Players File");
-//        }
-//  	}
   Player(std::string name, std::unique_ptr<Job> job, std::unique_ptr<Character> character)
     : name(std::move(name)), job(std::move(job)), character(std::move(character)) {
     if (this->job->getType() == "Warrior") {
@@ -158,28 +131,16 @@ public:
     *
     */
 
+
     bool operator<(const Player &other) const {
         if (this->level == other.level) {
             if (this->coins == other.coins) {
-                return name > other.name;
+                return name < other.name;  // Lexicographically smallest name first
             }
-            return coins > other.coins;
+            return coins > other.coins;  // Highest force first
         }
-        return level > other.level;
+        return level > other.level;  // Highest level first
     }
-    // bool operator<(const Player &other) const {
-    //     if (level != other.level) {
-    //         return level > other.level;  // Higher level first
-    //     }
-    //     if (coins != other.coins) {
-    //         return coins > other.coins;  // Higher coins first
-    //     }
-    //     return name < other.name;  // Alphabetical order as a tiebreaker
-    // }
-
-
-
-
 };
 
 class PlayerFactory {
@@ -234,5 +195,7 @@ public:
             // Create the player with the generate job and character
             return make_unique<Player>(name, std::move(jobPtr), std::move(characterPtr));
         }
+
+    static void readPlayers(std::istream& playersStream);
 };
 

@@ -32,4 +32,50 @@ public:
         }
         return it->second();
     }
+
+    void readEvents(std::istream& eventsStream) {
+        if (!eventsStream) {
+            throw std::runtime_error("Invalid Events File");
+        }
+
+        std::string eventName;
+        while (eventsStream >> eventName) {
+            if (eventName == "Pack") {
+                auto pack = parsePack(eventsStream);
+                Event::eventList.push_back(std::move(pack));
+            } else {
+                auto event = createEvent(eventName);
+                Event::eventList.push_back(std::move(event));
+            }
+        }
+    }
+
+    std::unique_ptr<Pack> parsePack(std::istream& eventsStream) {
+    int packSize;
+    if (!(eventsStream >> packSize) || packSize <= 0) {
+        throw std::runtime_error("Invalid Events File");
+    }
+
+    std::vector<std::unique_ptr<Monster>> packMembers;
+    for (int i = 0; i < packSize; i++) {
+        std::string eventName;
+        if (!(eventsStream >> eventName)) {
+            throw std::runtime_error("Invalid Events File");
+        }
+
+        if (eventName == "Pack") {
+            auto nestedPack = parsePack(eventsStream); // Recursive call
+            packMembers.push_back(std::move(nestedPack));
+        } else {
+            auto event = createEvent(eventName);
+            if (auto monster = dynamic_cast<Monster*>(event.get())) {
+                packMembers.push_back(std::make_unique<Monster>(*monster));
+            } else {
+                throw std::runtime_error("Invalid Events File");
+            }
+        }
+    }
+
+    return Pack::createPack(std::move(packMembers));
+    }
 };

@@ -24,21 +24,10 @@ public:
 class Responsible : public Character {
 public:
     ~Responsible() override = default;
-    std::string potionMerchant(Player& player) override; /* {
 
-            unsigned int potionAmount = 0;
-            if (player.getCharacter()->getType() == "Responsible") {
-                while (static_cast<int>(player.getMaxHP()) > player.getHealthPoints() && player.getCoins() >= 5 ) {
-                    player.setHealthPoints(player.getHealthPoints()+ 10) ;
-                    player.setCoins(player.getCoins()- 5);
-                    potionAmount++;
-                }
-            }
-            return getPotionsPurchaseMessage(player, potionAmount);
-        }
-        */
+    std::string potionMerchant(Player& player) override;
 
-    string getType() override ; /*{ return "Responsible";} */
+    string getType() override ;
 };
 
 class RiskTaking : public Character {
@@ -47,6 +36,6 @@ public:
 
     std::string potionMerchant(Player& player) override ;
 
-    std::string getType() override;/* { return "RiskTaking";};*/
+    std::string getType() override;
 };
 

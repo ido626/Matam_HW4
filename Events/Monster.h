@@ -22,9 +22,6 @@ class Monster:public Event{ // the base class
 
     ~Monster() override = default;
 
-    /** update combat power pure virtual (for balrog) */
-    virtual void updateCombatPower(){}
-
     string applyEvent(Player &player) override {
         return applyBattle(player);
     }
@@ -37,18 +34,25 @@ class Monster:public Event{ // the base class
     }
 
     /** getters **/
+    [[nodiscard]] virtual string getName() const {return monsterName;};
     [[nodiscard]] virtual unsigned int getCombatPower() const {return CombatPower;};
     [[nodiscard]] virtual unsigned int getLoot() const {return Loot;};
     [[nodiscard]] virtual unsigned int getDamage() const {return Damage;};
 
 
+    virtual void addCombatPower(int moreCP) {CombatPower += moreCP;};
+
     std::string applyBattle(Player& player) const {
         unsigned int playerCP = player.getJob()->calculateCombatPower(player);
-        if (playerCP > getDamage()) { // Player wins the fight
+        if (playerCP > getCombatPower()) { // Player wins the fight
             player.setLevel(player.getLevel() + 1);
             player.setCoins(player.getCoins() + getLoot());
             if (player.getJob()->getType() == "Warrior") {
-                player.setHealthPoints(player.getHealthPoints() - 10);
+                if (player.getHealthPoints() < 10) { // If the player is about to die from the close combat battle
+                    player.setHealthPoints(0);
+                } else { // If he stays alive
+                    player.setHealthPoints(player.getHealthPoints() - 10);
+                }
             }
             return getEncounterWonMessage(player, getLoot());
         }
@@ -60,6 +64,9 @@ class Monster:public Event{ // the base class
         }
 
     }
+
+    virtual bool isPack() const { return false; }
+
 };
 
 class Snail: public Monster {
@@ -76,13 +83,9 @@ class Balrog: public Monster {
     public:
     Balrog():Monster("Balrog",15,100,9001){}
 
-    void updateCombatPower() override { // the balrog combat power updates in every encounter no matter the outcome.
-        CombatPower += 2 ;
-    }
-
     string applyEvent(Player &player) override {
         std::string outcome = applyBattle(player);
-        updateCombatPower();
+        CombatPower += 2;
         return outcome;
     }
 };
@@ -93,11 +96,13 @@ private:
 
 
 public:
-    Pack():Monster("",0,0,0){}
+    Pack():Monster("Pack",0,0,0){}
 
     void addMonster(std::unique_ptr<Monster> monster) {
         monstersPack.push_back(std::move(monster));
     }
+
+    bool isPack() const override { return true; }
 
 
     // for modularity, I split all kinds of getters for the pack
@@ -129,13 +134,25 @@ public:
         }
         return combinedDamage;
     }
+
+    int packSize() const {
+        int count = 0;
+        for (const auto &monster : monstersPack) {
+            if (auto pack = dynamic_cast<const Pack*>(monster.get())) {
+                count += pack->packSize();  // Recursive call for nested packs
+            } else {count ++;}
+        }
+        return count;
+    }
+
     [[nodiscard]] string getDescription() const override {
-        return "Pack of " + std::to_string(monstersPack.size()) + " members (power "
+        return "Pack of " + std::to_string(packSize()) + " members (power "
               + std::to_string(getCombatPower())+
                 ", loot " + std::to_string(getLoot()) +
                     ", damage " + std::to_string(getDamage()) + ")";
 
     }
+
     static std::unique_ptr<Pack> createPack(std::vector<std::unique_ptr<Monster>> monsters) {
         auto pack = std::make_unique<Pack>();
         for (auto& monster : monsters) {
@@ -144,4 +161,26 @@ public:
         return pack;
     }
 
+    void applyBalrogCombatPower(std::vector<std::unique_ptr<Monster>>& monsters) {
+        for (auto& monster : monsters) {
+            // Check if it's a "Balrog" and increase its CombatPower
+            if (monster->getName() == "Balrog") {
+                monster->addCombatPower(2);
+            }
+
+            // If it's a pack, recursively check its members
+            if (auto pack = dynamic_cast<Pack*>(monster.get())) {
+                applyBalrogCombatPower(pack->monstersPack);
+            }
+        }
+    }
+
+    string applyEvent(Player &player) override {
+        std::string outcome = applyBattle(player);
+
+        // Apply combat power increase for Balrogs
+        applyBalrogCombatPower(this->monstersPack);
+
+        return outcome;
+    }
 };

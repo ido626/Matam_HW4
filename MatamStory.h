@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "Events/EventFactory.h"
-#include <set>
 
 class MatamStory{
 private:

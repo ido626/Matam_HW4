@@ -12,10 +12,6 @@ std::string Magician::solarEclipse(Player& player){
     return getSolarEclipseMessage(player, 1);
 }
 
-// unsigned int Magician::calculateCombatPower(const Player& player) const {
-//     return player.getForce() + player.getLevel();
-// }
-
 std::string  Magician::getType(){
     return "Magician";
 }
