@@ -1,0 +1,403 @@
+* commit 2bc8c7f199fab62a4ddb6dd0f3aa7766c449f181
+| Author: Ido <amit.ido@campus.technion.ac.il>
+| Date:   Thu Jan 30 23:02:40 2025 +0200
+| 
+|     finallized codes, everthing is working :)
+| 
+|  .gitmodules                                       |    0
+|  Events/.idea/.gitignore                           |    8 +
+|  Events/.idea/Events.iml                           |    8 +
+|  Events/.idea/editor.xml                           |  580 +++++++++
+|  Events/.idea/misc.xml                             |    6 +
+|  Events/.idea/modules.xml                          |    8 +
+|  Events/.idea/vcs.xml                              |    6 +
+|  Events/Event.cpp                                  |   54 -
+|  Events/Event.h                                    |   46 +-
+|  Events/EventFactory.h                             |   46 +
+|  Events/Monster.h                                  |   63 +-
+|  MatamStory.cpp                                    |   86 +-
+|  MatamStory.h                                      |    1 -
+|  Players/.DS_Store                                 |  Bin 0 -> 6148 bytes
+|  Players/.idea/.gitignore                          |    8 +
+|  Players/.idea/.name                               |    1 +
+|  Players/.idea/Players.iml                         |    2 +
+|  Players/.idea/editor.xml                          |  580 +++++++++
+|  Players/.idea/misc.xml                            |    7 +
+|  Players/.idea/modules.xml                         |    8 +
+|  Players/.idea/vcs.xml                             |    6 +
+|  Players/Archer.cpp                                |   15 +-
+|  Players/CMakeLists.txt                            |   27 +
+|  Players/Character.h                               |   21 +-
+|  Players/Job.h                                     |   11 +-
+|  Players/Magician.cpp                              |    4 -
+|  Players/Player.h                                  |   51 +-
+|  Players/PlayerFactory.cpp                         |   34 +
+|  Players/Warrior.cpp                               |   10 -
+|  .../.cmake/api/v1/query/cache-v2                  |    0
+|  .../.cmake/api/v1/query/cmakeFiles-v1             |    0
+|  .../.cmake/api/v1/query/codemodel-v2              |    0
+|  .../.cmake/api/v1/query/toolchains-v1             |    0
+|  .../v1/reply/cache-v2-a00873675e85564e400b.json   | 1199 +++++++++++++++++++
+|  .../reply/cmakeFiles-v1-8561c1fd09b82da3af29.json |  161 +++
+|  .../reply/codemodel-v2-dddb50a1466c23108cbe.json  |   60 +
+|  .../directory-.-Debug-f5ebdc15457944623624.json   |   14 +
+|  .../v1/reply/index-2025-01-29T11-43-50-0703.json  |  108 ++
+|  ...rget-Matam_HW4-Debug-867a56de4e7e4a4b1d0a.json |  241 ++++
+|  .../reply/toolchains-v1-73ba5002afb33725fe0c.json |   93 ++
+|  Players/cmake-build-debug/.ninja_deps             |  Bin 0 -> 421752 bytes
+|  Players/cmake-build-debug/.ninja_log              |   96 ++
+|  Players/cmake-build-debug/CMakeCache.txt          |  372 ++++++
+|  .../CMakeFiles/3.29.6/CMakeCCompiler.cmake        |   80 ++
+|  .../CMakeFiles/3.29.6/CMakeCXXCompiler.cmake      |   92 ++
+|  .../3.29.6/CMakeDetermineCompilerABI_C.bin        |  Bin 0 -> 17000 bytes
+|  .../3.29.6/CMakeDetermineCompilerABI_CXX.bin      |  Bin 0 -> 16984 bytes
+|  .../CMakeFiles/3.29.6/CMakeSystem.cmake           |   15 +
+|  .../3.29.6/CompilerIdC/CMakeCCompilerId.c         |  895 ++++++++++++++
+|  .../3.29.6/CompilerIdC/CMakeCCompilerId.o         |  Bin 0 -> 1712 bytes
+|  .../3.29.6/CompilerIdCXX/CMakeCXXCompilerId.cpp   |  878 ++++++++++++++
+|  .../3.29.6/CompilerIdCXX/CMakeCXXCompilerId.o     |  Bin 0 -> 1712 bytes
+|  .../CMakeFiles/CMakeConfigureLog.yaml             |  443 +++++++
+|  .../CMakeFiles/Matam_HW4.dir/Archer.cpp.o         |  Bin 0 -> 77416 bytes
+|  .../CMakeFiles/Matam_HW4.dir/Job.cpp.o            |  Bin 0 -> 72104 bytes
+|  .../CMakeFiles/Matam_HW4.dir/Magician.cpp.o       |  Bin 0 -> 78072 bytes
+|  .../CMakeFiles/Matam_HW4.dir/Player.cpp.o         |  Bin 0 -> 129400 bytes
+|  .../CMakeFiles/Matam_HW4.dir/PlayerFactory.cpp.o  |  Bin 0 -> 1201824 bytes
+|  .../CMakeFiles/Matam_HW4.dir/Responsible.cpp.o    |  Bin 0 -> 82928 bytes
+|  .../CMakeFiles/Matam_HW4.dir/RiskTaking.cpp.o     |  Bin 0 -> 78640 bytes
+|  .../Matam/HW4/Matam_HW4/Events/Encounter.cpp.o    |  Bin 0 -> 336 bytes
+|  .../Matam/HW4/Matam_HW4/Events/Event.cpp.o        |  Bin 0 -> 117168 bytes
+|  .../Matam/HW4/Matam_HW4/MatamStory.cpp.o          |  Bin 0 -> 1448936 bytes
+|  .../Documents/Matam/HW4/Matam_HW4/Utilities.cpp.o |  Bin 0 -> 176616 bytes
+|  .../ido/Documents/Matam/HW4/Matam_HW4/main.cpp.o  |  Bin 0 -> 420104 bytes
+|  .../CMakeFiles/Matam_HW4.dir/Warrior.cpp.o        |  Bin 0 -> 77880 bytes
+|  .../CMakeFiles/TargetDirectories.txt              |    3 +
+|  .../CMakeFiles/clion-Debug-log.txt                |    4 +
+|  .../CMakeFiles/clion-environment.txt              |  Bin 0 -> 244 bytes
+|  .../CMakeFiles/cmake.check_cache                  |    1 +
+|  Players/cmake-build-debug/CMakeFiles/rules.ninja  |   64 +
+|  Players/cmake-build-debug/Matam_HW4               |  Bin 0 -> 957192 bytes
+|  .../Testing/Temporary/LastTest.log                |    3 +
+|  Players/cmake-build-debug/build.ninja             |  208 ++++
+|  Players/cmake-build-debug/cmake_install.cmake     |   49 +
+|  README.md                                         |    7 -
+|  Untitled Diagram.drawio.xml                       |    2 -
+|  Utilities.cpp                                     |  117 --
+|  Utilities.h                                       |  146 ---
+|  main.cpp                                          |   66 -
+|  tests/test1.events                                |    5 -
+|  tests/test1.expected                              |   96 --
+|  tests/test1.players                               |    3 -
+|  tests/test2.events                                |    4 -
+|  tests/test2.expected                              |    1 -
+|  tests/test2.players                               |    3 -
+|  tests/test3.events                                |    5 -
+|  tests/test3.expected                              |    1 -
+|  tests/test3.players                               |    2 -
+|  89 files changed, 6497 insertions(+), 737 deletions(-)
+| 
+* commit 30bdffef1a9a0b0cbcd8648b091070ea2199913c
+| Author: Your Name <you@example.com>
+| Date:   Wed Jan 29 22:47:43 2025 +0200
+| 
+|     add get description to potionsMerchant
+| 
+|  Events/Event.cpp        |  4 +++-
+|  Events/Event.h          | 26 +++++++++-----------
+|  Events/EventFactory.h   |  4 ++--
+|  Events/Monster.h        |  5 +++-
+|  MatamStory.cpp          | 60 +++++++++++++++++++++++++++++++++++------------
+|  MatamStory.h            | 16 ++++++++-----
+|  Players/Character.h     | 10 +-------
+|  Players/Job.h           |  9 +++----
+|  Players/Player.cpp      |  2 +-
+|  Players/Player.h        | 16 +++++++++++--
+|  Players/Responsible.cpp |  2 +-
+|  main.cpp                | 26 ++++++++++++++++++++
+|  12 files changed, 123 insertions(+), 57 deletions(-)
+| 
+* commit 8d48a3b6eee4e17c3e076d124958660898967819
+| Author: Ido <amit.ido@campus.technion.ac.il>
+| Date:   Tue Jan 28 22:43:15 2025 +0200
+| 
+|     Compiling with cLion compiler
+| 
+|  Events/Encounter.cpp      | 25 -------------------------
+|  Events/Encounter.h        | 19 -------------------
+|  Events/Event.h            |  8 ++++----
+|  Events/EventFactory.h     |  3 ---
+|  Events/Monster.h          | 27 ++++++++++++++++++++-------
+|  MatamStory.cpp            |  1 -
+|  MatamStory.h              |  4 +---
+|  Players/Archer.cpp        | 30 ++++++++++++++----------------
+|  Players/Character.h       | 12 ++++--------
+|  Players/Job.cpp           |  3 ---
+|  Players/Job.h             | 19 ++++++++-----------
+|  Players/Magician.cpp      | 11 +++++------
+|  Players/Player.h          |  2 --
+|  Players/PlayerFactory.cpp |  6 ++++++
+|  Players/Responsible.cpp   |  1 -
+|  Players/RiskTaking.cpp    |  1 -
+|  Players/Warrior.cpp       | 18 ++++++++----------
+|  17 files changed, 70 insertions(+), 120 deletions(-)
+| 
+* commit 823b257a3d2aa13fed3a1b9463f22f52b376cee6
+| Author: Your Name <you@example.com>
+| Date:   Tue Jan 28 19:20:22 2025 +0200
+| 
+|     add Encounter.h
+| 
+|  Events/Encounter.cpp  |  3 ++-
+|  Events/Encounter.h    | 19 +++++++++++++++++++
+|  Events/Event.h        |  4 +++-
+|  Events/EventFactory.h |  2 +-
+|  Events/Monster.h      |  5 +++--
+|  Players/Job.cpp       |  1 +
+|  Players/Job.h         |  2 +-
+|  Players/Monster.cpp   |  5 -----
+|  Players/Monster.h     | 16 ----------------
+|  9 files changed, 30 insertions(+), 27 deletions(-)
+| 
+* commit e9c9ec22767319dedea365df7902b4f189f0ce86
+| Author: Your Name <you@example.com>
+| Date:   Tue Jan 28 16:37:57 2025 +0200
+| 
+|     add Job.h getDescription
+| 
+|  Events/Encounter.cpp    |  7 +++++--
+|  Events/Event.cpp        |  4 +---
+|  Events/Event.h          | 10 +++++-----
+|  Events/EventFactory.h   |  3 ++-
+|  Events/Monster.h        | 18 ++++++++++--------
+|  MatamStory.cpp          |  6 +++---
+|  MatamStory.h            |  2 +-
+|  Players/Archer.cpp      | 20 ++++++++++++++++++--
+|  Players/Character.h     | 39 +++++++++++++++++++++++++++++++++------
+|  Players/Job.cpp         |  4 ++--
+|  Players/Job.h           | 26 ++++++++++++++++++--------
+|  Players/Magician.cpp    |  9 +++++++--
+|  Players/Player.h        |  4 ++++
+|  Players/Responsible.cpp |  8 ++++----
+|  Players/RiskTaking.cpp  |  4 ++--
+|  Players/Warrior.cpp     | 17 ++++++++++++++---
+|  16 files changed, 129 insertions(+), 52 deletions(-)
+| 
+* commit f302b193a0323bcac48de89200cfbc82a43e4394
+| Author: Ido <amit.ido@campus.technion.ac.il>
+| Date:   Mon Jan 27 18:52:06 2025 +0200
+| 
+|     First prototype, needs to complie
+| 
+|  Events/Encounter.cpp    |  21 +++++
+|  Events/Event.h          | 150 ++++--------------------------
+|  Events/EventFactory.h   |  37 ++++++++
+|  Events/Monster.h        | 128 ++++++++++++++++++++++++++
+|  MatamStory.cpp          | 108 ++++++++++++++++------
+|  MatamStory.h            |  13 ++-
+|  Players/Archer.cpp      |   9 ++
+|  Players/Character.h     |  37 ++++++++
+|  Players/Job.cpp         |  20 ++++
+|  Players/Job.h           |  42 ++++-----
+|  Players/Magician.cpp    |  17 ++++
+|  Players/Monster.cpp     |   5 +
+|  Players/Monster.h       |  16 ++++
+|  Players/Player.cpp      |  31 ++++---
+|  Players/Player.h        | 226 +++++++++++++++++++++++++++++-----------------
+|  Players/Responsible.cpp |  22 +++++
+|  Players/RiskTaking.cpp  |  21 +++++
+|  Players/Warrior.cpp     |  14 +++
+|  18 files changed, 633 insertions(+), 284 deletions(-)
+|   
+*   commit 367b1913308e988d306929a8caabb10972a0052a
+|\  Merge: 51f04ad 95fe8a3
+| | Author: Ido <amit.ido@campus.technion.ac.il>
+| | Date:   Sun Jan 26 13:04:32 2025 +0200
+| | 
+| |     Merge branch 'main' into Ido
+| |   
+| *   commit 95fe8a36abc6986d1c63c50d0507bfa30a86eac7
+| |\  Merge: 8f1833e 589d605
+| | | Author: Your Name <you@example.com>
+| | | Date:   Thu Jan 23 23:38:53 2025 +0200
+| | | 
+| | |     Merge branch 'daniel'
+| | | 
+| | * commit 589d605f01ecd16bd42b1d72d717b52f197b9f4d
+| | | Author: Your Name <you@example.com>
+| | | Date:   Thu Jan 23 23:38:30 2025 +0200
+| | | 
+| | |      add Event.h updated with factory method
+| | | 
+| | |  Events/Event.cpp   |   5 +--
+| | |  Events/Event.h     | 115 ++++++++++++++++++-----------------------------
+| | |  MatamStory.cpp     |  64 +++++++++++++++++---------
+| | |  Players/Monsters.h |  61 -------------------------
+| | |  4 files changed, 88 insertions(+), 157 deletions(-)
+| | | 
+| * | commit 8f1833e7acbc18c8a272818fec0160310e506de6
+| |\| Merge: a874681 309499c
+| | | Author: Your Name <you@example.com>
+| | | Date:   Wed Jan 22 23:51:18 2025 +0200
+| | | 
+| | |     Merge branch 'daniel'
+| | | 
+| | * commit 309499c257eb4c09cac739a75c1443f7b547be6e
+| | | Author: Your Name <you@example.com>
+| | | Date:   Wed Jan 22 23:50:24 2025 +0200
+| | | 
+| | |     add MatamStory playTurn method
+| | | 
+| | |  Events/Event.cpp |  38 ++++++++++++++---
+| | |  Events/Event.h   | 110 ++++++++++++++++++++++++++++++++++++++-----------
+| | |  MatamStory.cpp   |  12 +++---
+| | |  MatamStory.h     |   2 +
+| | |  4 files changed, 126 insertions(+), 36 deletions(-)
+| | | 
+| * | commit a87468196bba8cebd626a80ca416a82b2f089867
+| |\| Merge: dbc1a11 dade234
+| | | Author: Your Name <you@example.com>
+| | | Date:   Mon Jan 20 17:17:55 2025 +0200
+| | | 
+| | |     Merge branch 'daniel'
+| | | 
+| | * commit dade234e07349c312edeec86df81a24c4c2c86fe
+| | | Author: Your Name <you@example.com>
+| | | Date:   Mon Jan 20 17:17:42 2025 +0200
+| | | 
+| | |     Last updates in MatamStory and Event
+| | | 
+| | |  Events/Event.cpp | 43 ++++++++++++++++-------------
+| | |  Events/Event.h   | 74 +++++++++++++++++++++++++++++++++++++-------------
+| | |  MatamStory.cpp   | 42 ++++++++++++++++++----------
+| | |  3 files changed, 106 insertions(+), 53 deletions(-)
+| | | 
+| * | commit dbc1a118ed27dd8078223e5f42cccf2ca6896ae7
+| |\| Merge: 90661dd 064cc8c
+| | | Author: Your Name <you@example.com>
+| | | Date:   Sat Jan 18 22:06:55 2025 +0200
+| | | 
+| | |     Merge branch 'daniel'
+| | | 
+| | * commit 064cc8c214bbbeb838ae11fa402482e3e7994c4f
+| | | Author: Your Name <you@example.com>
+| | | Date:   Sat Jan 18 22:06:30 2025 +0200
+| | | 
+| | |     add Event.h Event.cpp ../MatamStory.cpp
+| | | 
+| | |  Events/Event.cpp |  34 +++++++++++++
+| | |  Events/Event.h   | 134 ++++++++++++++++++++++++++++++++++++++++++++++++-
+| | |  MatamStory.cpp   |  25 ++++++++-
+| | |  3 files changed, 190 insertions(+), 3 deletions(-)
+| | | 
+* | | commit 51f04adb305bbcce8cc9fde10cc92261ae5b613c
+| | | Author: Ido <amit.ido@campus.technion.ac.il>
+| | | Date:   Sun Jan 26 13:00:54 2025 +0200
+| | | 
+| | |     add Job.h
+| | | 
+| | |  Players/Job.h | 58 ++++++++++++++++++++++++++++++++++++++++++++++++++---
+| | |  1 file changed, 55 insertions(+), 3 deletions(-)
+| | | 
+* | | commit 3ab0193340a3b7dcea756216d7674fea3d019eda
+| | | Author: Ido <amit.ido@campus.technion.ac.il>
+| | | Date:   Sun Jan 26 12:54:56 2025 +0200
+| | | 
+| | |     Implement prototype for Player class and its fields/sub classes
+| | | 
+| | |  Players/Archer.cpp      |   3 -
+| | |  Players/Archer.h        |   8 ---
+| | |  Players/Job.h           |   8 +++
+| | |  Players/Magician.cpp    |   3 -
+| | |  Players/Magician.h      |   8 ---
+| | |  Players/Player.cpp      |  51 ++++++++++++---
+| | |  Players/Player.h        | 144 ++++++++++++++++++++++++++++++------------
+| | |  Players/Responsible.cpp |   9 ---
+| | |  Players/RiskTaking.cpp  |   9 ---
+| | |  Players/Warrior.cpp     |  13 ----
+| | |  Players/Warrior.h       |  28 --------
+| | |  11 files changed, 153 insertions(+), 131 deletions(-)
+| | | 
+* | | commit 6a39e945c3ab94422ea0cb40caecceed8071901f
+|/ /  Author: Ido <amit.ido@campus.technion.ac.il>
+| |   Date:   Sun Jan 19 22:24:30 2025 +0200
+| |   
+| |       UMMM
+| |   
+| |    Players/Archer.cpp      |  3 +++
+| |    Players/Archer.h        |  8 +++++++
+| |    Players/Magician.cpp    |  3 +++
+| |    Players/Magician.h      |  8 +++++++
+| |    Players/Player.cpp      | 34 +++++++++++++++++++++++++++
+| |    Players/Player.h        | 53 +++++++++++++++++++++++++++++++++++++++++--
+| |    Players/Responsible.cpp |  9 ++++++++
+| |    Players/RiskTaking.cpp  |  9 ++++++++
+| |    Players/Warrior.cpp     | 13 +++++++++++
+| |    Players/Warrior.h       | 28 +++++++++++++++++++++++
+| |    10 files changed, 166 insertions(+), 2 deletions(-)
+| |   
+* |   commit 90661ddb975431258710d594e59e9fdc49dc06b6
+|\ \  Merge: 3fba81d 3a16617
+| |/  Author: Your Name <you@example.com>
+|/|   Date:   Mon Jan 13 22:52:57 2025 +0200
+| |   
+| |       Merge branch 'main' of https://github.com/ido626/Matam_HW4
+| | 
+| * commit 3a16617246b3acecf5b366ca8dd2c68627c698ba
+| | Author: ido626 <amit.ido@campus.technion.ac.il>
+| | Date:   Mon Jan 13 10:04:40 2025 +0200
+| | 
+| |     Added Untitled Diagram.drawio.xml
+| | 
+| |  Untitled Diagram.drawio.xml | 2 ++
+| |  1 file changed, 2 insertions(+)
+| | 
+* | commit 3fba81dfc62a4a6551175eedd6e5c168762ef198
+|/  Author: Your Name <you@example.com>
+|   Date:   Mon Jan 13 22:48:39 2025 +0200
+|   
+|       first commit class monsters
+|   
+|    Players/Monsters.h | 61 ++++++++++++++++++++++++++++++++++++++++++++++++++
+|    1 file changed, 61 insertions(+)
+| 
+* commit 36e0a570a1ae4093ddf45c2cac7bd6665f8ac175
+| Author: Yinon Goldshtein <yinongold@gmail.com>
+| Date:   Wed Jan 8 19:52:22 2025 +0200
+| 
+|     updated course number in README
+| 
+|  README.md | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 11db499619ae45b95224312022c5e0459653edcd
+| Author: Egbaria Mohammad-Baraa <102754795+EgbariaMohammad@users.noreply.github.com>
+| Date:   Wed Jan 8 19:48:30 2025 +0200
+| 
+|     Update README.md
+| 
+|  README.md | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 89b5f6299cabd5cfeb30a0873786055da6280436
+  Author: Yinon Goldshtein <yinongold@gmail.com>
+  Date:   Tue Jan 7 01:02:53 2025 +0200
+  
+      initial commit
+  
+   Events/Event.h       |  14 +++++
+   MatamStory.cpp       |  74 +++++++++++++++++++++++++
+   MatamStory.h         |  55 +++++++++++++++++++
+   Players/Player.h     |  51 +++++++++++++++++
+   README.md            |   7 +++
+   Utilities.cpp        | 117 +++++++++++++++++++++++++++++++++++++++
+   Utilities.h          | 146 +++++++++++++++++++++++++++++++++++++++++++++++++
+   main.cpp             |  40 ++++++++++++++
+   tests/test1.events   |   5 ++
+   tests/test1.expected |  96 ++++++++++++++++++++++++++++++++
+   tests/test1.players  |   3 +
+   tests/test2.events   |   4 ++
+   tests/test2.expected |   1 +
+   tests/test2.players  |   3 +
+   tests/test3.events   |   5 ++
+   tests/test3.expected |   1 +
+   tests/test3.players  |   2 +
+   17 files changed, 624 insertions(+)
